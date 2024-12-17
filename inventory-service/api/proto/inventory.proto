@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package inventory;
+
+option go_package = "./inventory";
+
+message Item {
+  int64 id = 1;
+  string name = 2;
+  int64 quantity = 3;
+  float price = 4;
+  string user_id = 5;
+}
+
+message AddItemRequest {
+  Item item = 1;
+}
+
+message AddItemResponse {
+  string message = 1;
+  bool success = 2;
+}
+
+message UpdateItemRequest {
+  Item item = 1;
+}
+
+message UpdateItemResponse {
+  string message = 1;
+  bool success = 2;
+}
+
+message GetItemRequest {
+  string id = 1;
+  string user_id = 2;
+}
+
+message GetItemResponse {
+  Item item = 1;
+}
+
+message DeleteItemRequest {
+  string id = 1;
+  string user_id = 2;
+}
+
+message DeleteItemResponse {
+  string message = 1;
+  bool success = 2;
+}
+
+message GetInventoryRequest {
+  string user_id = 1;
+}
+
+message GetInventoryResponse {
+  repeated Item items = 1;
+}
+
+// Событие о добавлении товара в инвентарь (для Kafka)
+message InventoryItemAdded {
+  Item item = 1;
+}
+
+// Событие об обновлении товара в инвентаре (для Kafka)
+message InventoryItemUpdated {
+  Item item = 1;
+}
+
+// Событие о удалении товара из инвентаря (для Kafka)
+message InventoryItemDeleted {
+  string item_id = 1;
+}
+
+service InventoryService {
+  rpc AddItem (AddItemRequest) returns (AddItemResponse);
+  rpc UpdateItem (UpdateItemRequest) returns (UpdateItemResponse);
+  rpc GetItem (GetItemRequest) returns (GetItemResponse);
+  rpc DeleteItem (DeleteItemRequest) returns (DeleteItemResponse);
+  rpc GetInventory (GetInventoryRequest) returns (GetInventoryResponse);
+}
